@@ -1,0 +1,62 @@
+﻿<Window x:Class="ExpertService.WindowsFolder.AddOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpertService.WindowsFolder"
+        mc:Ignorable="d"
+        Title="Создание заказа" Height="600" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <StackPanel>
+                <TextBlock Text="Новый заказ" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                <!-- Блок информации о клиенте -->
+                <GroupBox Header="Информация о клиенте" Padding="10">
+                    <StackPanel>
+                        <ComboBox x:Name="ClientsComboBox" DisplayMemberPath="FullName" Margin="0,0,0,10"/>
+                        <CheckBox x:Name="NewClientCheckBox" Content="Создать нового клиента" Checked="NewClientCheckBox_Checked" Unchecked="NewClientCheckBox_Unchecked"/>
+                        <StackPanel x:Name="NewClientPanel" Visibility="Collapsed" Margin="0,10,0,0">
+                            <TextBlock Text="ФИО клиента:"/>
+                            <TextBox x:Name="NewClientNameTextBox" Margin="0,0,0,5"/>
+                            <TextBlock Text="Номер телефона:"/>
+                            <TextBox x:Name="NewClientPhoneTextBox" Margin="0,0,0,5"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Блок информации об устройстве -->
+                <GroupBox Header="Информация об устройстве" Padding="10" Margin="0,15,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Тип устройства (напр., Смартфон):"/>
+                        <TextBox x:Name="DeviceTypeTextBox" Margin="0,0,0,5"/>
+                        <TextBlock Text="Производитель (напр., Apple):"/>
+                        <TextBox x:Name="DeviceManufacturerTextBox" Margin="0,0,0,5"/>
+                        <TextBlock Text="Модель (напр., iPhone 13):"/>
+                        <TextBox x:Name="DeviceModelTextBox" Margin="0,0,0,5"/>
+                        <TextBlock Text="Серийный номер (необязательно):"/>
+                        <TextBox x:Name="DeviceSerialTextBox" Margin="0,0,0,5"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Блок деталей заказа -->
+                <GroupBox Header="Детали заказа" Padding="10" Margin="0,15,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Описание проблемы (со слов клиента):"/>
+                        <TextBox x:Name="ProblemDescriptionTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10"/>
+                        <TextBlock Text="Назначить мастера (необязательно):"/>
+                        <ComboBox x:Name="MastersComboBox" DisplayMemberPath="User.FullName"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Кнопки действий -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,25,0,0">
+                    <Button Content="Сохранить заказ" Width="120" Padding="10,5" Click="SaveButton_Click"/>
+                    <Button Content="Отмена" Width="80" Margin="10,0,0,0" IsCancel="True"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>

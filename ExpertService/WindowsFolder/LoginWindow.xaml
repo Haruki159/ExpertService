@@ -1,0 +1,33 @@
+﻿<Window x:Class="ExpertService.WindowsFolder.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExpertService.WindowsFolder"
+        mc:Ignorable="d"
+        Title=" Эксперт | Авторизация " Height="450" Width="800">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" Margin="30">
+            <!-- Заголовок формы -->
+            <TextBlock Text="Авторизация" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
+
+            <!-- Поле для ввода логина -->
+            <TextBlock Text="Логин:" Margin="0,10,0,0"/>
+            <TextBox x:Name="LoginBox" />
+
+            <!-- Поле для ввода пароля -->
+            <TextBlock Text="Пароль:" Margin="0,10,0,0"/>
+            <PasswordBox x:Name="PassBox"/>
+
+            <!-- Кнопка "Войти" -->
+            <Button x:Name="LoginButton" 
+                    Content="Войти" 
+                    Margin="0,20,0,0" 
+                    Click="LoginButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,56 @@
+﻿<Page x:Class="ExpertService.PagesFolder.PartsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ExpertService.PagesFolder"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PartsPage">
+
+    <DockPanel Margin="20">
+        <TextBlock DockPanel.Dock="Top" Text="Склад запчастей" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <!-- Панель поиска -->
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,15">
+            <Button DockPanel.Dock="Right" Content="Удалить выбранное" Click="DeletePartButton_Click" Margin="10,0,0,0" HorizontalAlignment="Right" Background="#D9534F" Foreground="White"/>
+            <Button DockPanel.Dock="Right" Content="Добавить деталь" HorizontalAlignment="Right" Margin="10,0,0,0" Click="AddPartButton_Click"/>
+            <TextBox x:Name="SearchTextBox" 
+         TextChanged="SearchTextBox_TextChanged" 
+         VerticalContentAlignment="Center" FontSize="14" Padding="5"/>
+        </DockPanel>
+
+        <!-- Таблица с запчастями -->
+        <DataGrid x:Name="PartsDataGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+
+            <!-- Стиль для строк таблицы -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <!-- Триггер, который меняет цвет фона, если запчастей мало -->
+                        <DataTrigger Binding="{Binding QuantityInStock}" Value="0">
+                            <Setter Property="Background" Value="#FFE0E0"/>
+                            <!-- Красный, если закончились -->
+                            <Setter Property="ToolTip" Value="Товар закончился"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLowStock}" Value="True">
+                            <!-- IsLowStock - это свойство, которое нужно будет добавить в модель -->
+                            <Setter Property="Background" Value="#FFF5E0"/>
+                            <!-- Желтый, если мало -->
+                            <Setter Property="ToolTip" Value="Товар заканчивается"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Артикул (SKU)" Binding="{Binding SKU}" Width="1.5*"/>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding PartName}" Width="3*"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="4*"/>
+                <DataGridTextColumn Header="На складе" Binding="{Binding QuantityInStock}" Width="1*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Page>
