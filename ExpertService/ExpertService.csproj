@@ -189,7 +189,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -251,7 +250,6 @@
       <DependentUpon>ServiceDB.edmx</DependentUpon>
       <LastGenOutput>ServiceDB.cs</LastGenOutput>
     </Content>
-    <Content Include="RepairServiceDB.sql" />
     <Resource Include="Resources\Logo_1.png" />
     <Resource Include="Icon.ico" />
   </ItemGroup>

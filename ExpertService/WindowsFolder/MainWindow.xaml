@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpertService.WindowsFolder"
         mc:Ignorable="d"
-        Title="Эксперт | Система управления заказами" Height="450" Width="800">
+        Title="Эксперт | Система управления заказами" 
+        Height="1080" Width="1920"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
