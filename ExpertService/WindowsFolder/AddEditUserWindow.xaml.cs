@@ -43,7 +43,7 @@ namespace ExpertService.WindowsFolder
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Валидация
+            // Валидация (остается без изменений)
             if (string.IsNullOrWhiteSpace(FullNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(LoginTextBox.Text) ||
                 RoleComboBox.SelectedItem == null)
@@ -58,12 +58,9 @@ namespace ExpertService.WindowsFolder
             _user.RoleID = (int)RoleComboBox.SelectedValue;
             _user.IsActive = IsActiveCheckBox.IsChecked ?? false;
 
-            // Обработка пароля. Меняем, только если поле пароля не пустое.
             if (!string.IsNullOrWhiteSpace(PasswordBox.Password))
             {
-                // В реальном приложении здесь должно быть хэширование!
-                // Например: _user.PasswordHash = YourHashingFunction(PasswordBox.Password);
-                _user.PasswordHash = PasswordBox.Password; // Временная заглушка без хэширования
+                _user.PasswordHash = PasswordBox.Password; // Заглушка, здесь должно быть хэширование
             }
 
             try
@@ -72,15 +69,46 @@ namespace ExpertService.WindowsFolder
                 if (_user.UserID == 0)
                 {
                     _context.Users.Add(_user);
+
+                    // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ---
+                    // Если новому пользователю присвоена роль "Мастер" (ID = 2),
+                    // то нужно создать для него запись и в таблице Masters.
+                    if (_user.RoleID == 2)
+                    {
+                        var newMaster = new Master
+                        {
+                            User = _user // Связываем новую запись мастера с только что созданным пользователем
+                                         // Здесь можно добавить другие поля, если они есть в таблице Masters, например, Specialization
+                        };
+                        _context.Masters.Add(newMaster);
+                    }
                 }
                 else // Иначе - редактируем
                 {
-                    // Находим пользователя в контексте и обновляем его
                     var userInDb = _context.Users.Find(_user.UserID);
                     if (userInDb != null)
                     {
-                        // Копируем свойства. Attach и EntityState.Modified могут быть сложными с синглтоном.
                         _context.Entry(userInDb).CurrentValues.SetValues(_user);
+
+                        // --- ДОПОЛНИТЕЛЬНАЯ ЛОГИКА ПРИ РЕДАКТИРОВАНИИ ---
+                        // Проверяем, не изменилась ли роль на "Мастер"
+                        bool isMasterNow = _user.RoleID == 2;
+                        bool wasMasterBefore = _context.Masters.Any(m => m.UserID == _user.UserID);
+
+                        // Если стал мастером, а раньше не был
+                        if (isMasterNow && !wasMasterBefore)
+                        {
+                            _context.Masters.Add(new Master { UserID = _user.UserID });
+                        }
+                        // Если перестал быть мастером, а раньше был
+                        else if (!isMasterNow && wasMasterBefore)
+                        {
+                            var masterRecord = _context.Masters.FirstOrDefault(m => m.UserID == _user.UserID);
+                            if (masterRecord != null)
+                            {
+                                _context.Masters.Remove(masterRecord);
+                            }
+                        }
                     }
                 }
 

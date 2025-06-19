@@ -31,13 +31,11 @@
                     <Style.Triggers>
                         <!-- Триггер, который меняет цвет фона, если запчастей мало -->
                         <DataTrigger Binding="{Binding QuantityInStock}" Value="0">
-                            <Setter Property="Background" Value="#FFE0E0"/>
                             <!-- Красный, если закончились -->
                             <Setter Property="ToolTip" Value="Товар закончился"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsLowStock}" Value="True">
                             <!-- IsLowStock - это свойство, которое нужно будет добавить в модель -->
-                            <Setter Property="Background" Value="#FFF5E0"/>
                             <!-- Желтый, если мало -->
                             <Setter Property="ToolTip" Value="Товар заканчивается"/>
                         </DataTrigger>

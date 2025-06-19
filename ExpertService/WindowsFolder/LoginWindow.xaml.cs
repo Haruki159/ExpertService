@@ -27,18 +27,28 @@ namespace ExpertService.WindowsFolder
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var currentUser = RepairServiceDBEntities.GetContext().Users.FirstOrDefault(p => p.Login == LoginBox.Text && p.PasswordHash == PassBox.Password);
+            string login = LoginBox.Text;
+            string password = PassBox.Password;
+
+            var userToLogin = RepairServiceDBEntities.GetContext().Users.FirstOrDefault(p => p.Login == login);
+
+            if (userToLogin == null)
             {
-                if (currentUser != null)
-                {
-                    MainWindow mainWindow = new MainWindow(currentUser);
-                    mainWindow.Show();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Пользователь не найден", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
+                MessageBox.Show("Пользователь с таким логином не найден.", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else if (userToLogin.PasswordHash != password)
+            {
+                MessageBox.Show("Неверный пароль.", "Ошибка авторизации", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else if (userToLogin.IsActive == false)
+            {
+                MessageBox.Show("Ваша учетная запись деактивирована. Обратитесь к администратору.", "Доступ заблокирован", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                MainWindow mainWindow = new MainWindow(userToLogin);
+                mainWindow.Show();
+                this.Close();
             }
         }
     }

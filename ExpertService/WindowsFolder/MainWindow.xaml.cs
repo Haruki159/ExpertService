@@ -1,6 +1,7 @@
 ﻿using ExpertService.ClassFolder;
 using ExpertService.DataBase;
 using ExpertService.PagesFolder;
+using ExpertService.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace ExpertService.WindowsFolder
 
         private void CheckUserRole()
         {
+            // RoleID 1 - это Администратор
             // RoleID 3 - это Менеджер
             if (_currentUser.RoleID == 3 || _currentUser.RoleID == 1)
             {
@@ -43,6 +45,7 @@ namespace ExpertService.WindowsFolder
             }
             if (_currentUser.RoleID == 1)
             {
+                AllOrdersButton.Visibility = Visibility.Visible;
                 PersonnelButton.Visibility = Visibility.Visible;
             }
         }
@@ -110,6 +113,14 @@ namespace ExpertService.WindowsFolder
             if (!(Manager.MainFrame.Content is PersonnelPage))
             {
                 Manager.MainFrame.Navigate(new PersonnelPage());
+            }
+        }
+
+        private void AllOrdersButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(Manager.MainFrame.Content is AllOrdersPage))
+            {
+                Manager.MainFrame.Navigate(new AllOrdersPage());
             }
         }
     }

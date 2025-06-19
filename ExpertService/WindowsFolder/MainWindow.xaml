@@ -8,61 +8,80 @@
         Title="Эксперт | Система управления заказами" 
         Height="1080" Width="1920"
         WindowStyle="None"
-        AllowsTransparency="True"
         WindowState="Maximized">
+    <Window.Resources>
+        <!-- Стиль для ОБЫЧНОЙ кнопки навигации -->
+        <Style x:Key="NavigationButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15, 12"/>
+            <Setter Property="BorderThickness" Value="3,0,0,0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Основная сетка с двумя колонками -->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="220"/>
             <!-- Панель навигации -->
             <ColumnDefinition Width="*"/>
             <!-- Область контента -->
         </Grid.ColumnDefinitions>
 
-        <!-- Левая панель навигации (Grid.Column="0") -->
-        <Border Grid.Column="0" Background="#F0F0F0" BorderBrush="#DDDDDD" BorderThickness="0,0,1,0">
+        <!-- 
+        ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ (Grid.Column="0")
+        ИСПРАВЛЕНИЕ: У Border удален жестко заданный Background. 
+        Теперь он берет фон из стиля для контейнеров, который мы добавили в файлы тем.
+        -->
+        <Border Grid.Column="0" 
+                BorderThickness="0,0,1,0">
             <DockPanel>
-                <!-- Панель с кнопками навигации -->
+                <!-- Верхняя часть с логотипом и кнопками -->
                 <StackPanel DockPanel.Dock="Top" Margin="10">
-                    <Image Source="/Resources/Logo_1.png" Margin="5"/>
-                    <TextBlock Text="Навигация" FontSize="16" FontWeight="Bold" Margin="10, 5, 10, 15" Foreground="#555"/>
+                    <!-- Логотип (путь к картинке нужно проверить) -->
+                    <Image Source="/Resources/Logo_1.png" Height="40" Margin="10, 5, 10, 20"/>
 
-                    <Button x:Name="OrdersButton" 
-                            Content="Мои заказы"
-                            Click="OrdersButton_Click" Margin="5"/>
+                    <TextBlock Text="Навигация" FontSize="12" FontWeight="Bold" Margin="10, 0, 10, 5"/>
 
-                    <Button x:Name="PartsButton" 
-                            Content="Склад запчастей"
-                            Click="PartsButton_Click" Margin="5"/>
-
-                    <Button x:Name="HelpButton" 
-                            Content="Справочники"
-                            Click="HelpButton_Click" Margin="5"/>
-
-                    <Button x:Name="AddOrderButton" 
-                            Content="Создать заказ"
-                            Click="AddOrderButton_Click"
-                            Visibility="Collapsed" Margin="5"/>
-
-                    <Button x:Name="PersonnelButton" 
-                        Content="Управление персоналом"
-                        Click="PersonnelButton_Click"
-                        Visibility="Collapsed" Margin="5"/>
+                    <Button x:Name="PersonnelButton" Content="Управление персоналом" Style="{StaticResource NavigationButton}" Click="PersonnelButton_Click" Visibility="Collapsed"/>
+                    <Button x:Name="AddOrderButton" Content="Создать заказ" Style="{StaticResource NavigationButton}" Click="AddOrderButton_Click" Visibility="Collapsed"/>
+                    <Button x:Name="OrdersButton" Content="Мои заказы" Style="{StaticResource NavigationButton}" Click="OrdersButton_Click"/>
+                    <Button x:Name="PartsButton" Content="Склад запчастей" Style="{StaticResource NavigationButton}" Click="PartsButton_Click"/>
+                    <Button x:Name="AllOrdersButton" Content="Все заказы" Style="{StaticResource NavigationButton}" Click="AllOrdersButton_Click" Visibility="Collapsed"/>
+                    <Button x:Name="HelpButton" Content="Справочники" Style="{StaticResource NavigationButton}" Click="HelpButton_Click"/>
                 </StackPanel>
 
-                <!-- Информация о пользователе внизу панели -->
+                <!-- Нижняя часть с информацией о пользователе и настройками -->
                 <StackPanel DockPanel.Dock="Bottom" Margin="10, 0, 10, 20" VerticalAlignment="Bottom">
-                    <Separator Margin="0, 10"/>
-                    <TextBlock Text="Мастер:" FontSize="12" Foreground="#777"/>
+                    
+                    <TextBlock Text="Мастер:" FontSize="12"/>
                     <TextBlock x:Name="MasterNameTextBlock" 
                                Text="Имя Мастера" 
                                FontSize="14" 
-                               FontWeight="Bold"/>
-                    <Button Content="Выйти" Margin="0,10,0,0" Click="LogoutButton_Click"/>
+                               FontWeight="Bold"
+                               TextTrimming="CharacterEllipsis"/>
+                    <Button Content="Выйти" Margin="0,10,0,0" Click="LogoutButton_Click" Style="{StaticResource NavigationButton}" BorderThickness="1" BorderBrush="Red"/>
                 </StackPanel>
             </DockPanel>
         </Border>
-
-        <!-- Правая область для отображения страниц (Grid.Column="1") -->
         <Frame x:Name="MainFrame" 
                Grid.Column="1"
                NavigationUIVisibility="Hidden"/>

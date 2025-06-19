@@ -33,12 +33,21 @@ namespace ExpertService.WindowsFolder
             {
                 // Загружаем существующих клиентов
                 ClientsComboBox.ItemsSource = _context.Clients.ToList();
-                // Загружаем мастеров, включая их имена из таблицы Users
-                MastersComboBox.ItemsSource = _context.Masters.Include(m => m.User).ToList();
+
+                // Загружаем АКТУАЛЬНЫЙ список мастеров
+                // Включаем User, чтобы получить FullName
+                // Фильтруем по роли "Мастер" (RoleID = 2) и по статусу IsActive
+                MastersComboBox.ItemsSource = _context.Masters
+                                                .Include(m => m.User)
+                                                .Where(m => m.User.RoleID == 2 && m.User.IsActive)
+                                                .ToList();
+
+                // Указываем, какое свойство показывать пользователю
+                MastersComboBox.DisplayMemberPath = "User.FullName";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка загрузки данных: {ex.InnerException?.Message ?? ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
