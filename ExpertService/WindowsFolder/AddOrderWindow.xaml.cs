@@ -130,8 +130,13 @@ namespace ExpertService.WindowsFolder
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
-                    MessageBox.Show($"Произошла ошибка при сохранении заказа: {ex.Message}\n\nInner Exception: {ex.InnerException?.Message}", "Критическая ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    string innerEx = (ex.InnerException != null) ? ex.InnerException.Message : "Нет подробностей.";
+
+                    // ВАЖНО: Выводим подробное сообщение
+                    MessageBox.Show($"Произошла ошибка при сохранении заказа.\n" +
+                                    $"Сообщение: {ex.Message}\n" +
+                                    $"Подробности: {innerEx}",
+                                    "Критическая ошибка БД", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

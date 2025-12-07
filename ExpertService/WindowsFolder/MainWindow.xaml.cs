@@ -30,7 +30,7 @@ namespace ExpertService.WindowsFolder
             InitializeComponent();
             _currentUser = user;
             Manager.MainFrame = MainFrame;
-            Manager.MainFrame.Navigate(new OrdersPage(_currentUser.Login));
+            Manager.MainFrame.Navigate(new Dashboard());
             DisplayUserInfo();
             CheckUserRole();
         }
@@ -122,6 +122,11 @@ namespace ExpertService.WindowsFolder
             {
                 Manager.MainFrame.Navigate(new AllOrdersPage());
             }
+        }
+
+        private void StatisticButton_Click(object sender, RoutedEventArgs e)
+        {
+                Manager.MainFrame.Navigate(new Dashboard());
         }
     }
 }

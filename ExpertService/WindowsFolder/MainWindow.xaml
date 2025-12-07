@@ -61,6 +61,7 @@
 
                     <TextBlock Text="Навигация" FontSize="12" FontWeight="Bold" Margin="10, 0, 10, 5"/>
 
+                    <Button x:Name="StatisticButton" Content="Статистика заказов" Style="{StaticResource NavigationButton}" Click="StatisticButton_Click"/>
                     <Button x:Name="PersonnelButton" Content="Управление персоналом" Style="{StaticResource NavigationButton}" Click="PersonnelButton_Click" Visibility="Collapsed"/>
                     <Button x:Name="AddOrderButton" Content="Создать заказ" Style="{StaticResource NavigationButton}" Click="AddOrderButton_Click" Visibility="Collapsed"/>
                     <Button x:Name="OrdersButton" Content="Мои заказы" Style="{StaticResource NavigationButton}" Click="OrdersButton_Click"/>

@@ -27,8 +27,8 @@ namespace ExpertService.WindowsFolder
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string login = LoginBox.Text;
-            string password = PassBox.Password;
+            string login = TxtLogin.Text;
+            string password = PwdPassword.Password;
 
             var userToLogin = RepairServiceDBEntities.GetContext().Users.FirstOrDefault(p => p.Login == login);
 
