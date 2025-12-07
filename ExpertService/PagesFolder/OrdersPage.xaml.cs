@@ -1,7 +1,10 @@
-﻿using ExpertService.DataBase;
+﻿using ExpertService.ClassFolder;
+using ExpertService.DataBase;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Data.Entity;
+using static MaterialDesignThemes.Wpf.Theme;
 
 namespace ExpertService.PagesFolder
 {
@@ -164,6 +167,72 @@ namespace ExpertService.PagesFolder
             {
                 MessageBox.Show($"Произошла критическая ошибка при сохранении: {ex.InnerException?.Message ?? ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            dynamic selectedItem = OrdersDataGrid.SelectedItem;
+            if (selectedItem == null)
+            {
+                MessageBox.Show("Выберите заказ!");
+                return;
+            }
+
+            int orderId = selectedItem.OrderID;
+
+            // Загружаем данные (с Include)
+            var selectedOrder = RepairServiceDBEntities.GetContext().Orders
+                .Include(o => o.Client)
+                .Include(o => o.Device)
+                .FirstOrDefault(o => o.OrderID == orderId);
+
+            if (selectedOrder == null) return;
+
+
+            // --- ИЗМЕНЕНИЯ ТУТ: ПУТЬ К РАБОЧЕМУ СТОЛУ ---
+
+            // 1. Получаем путь к Рабочему столу
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            // 2. Добавляем имя папки (чтобы был порядок)
+            string folderPath = System.IO.Path.Combine(desktopPath, "Квитанции Эксперт");
+
+            // 3. Если папки нет - создаем её
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
+
+            // 4. Формируем имя файла
+            string clientName = selectedOrder.Client.FullName;
+            string fileName = $"{clientName} заказ {selectedOrder.OrderID}.docx";
+
+            // Очистка имени от запрещенных знаков
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+
+            // 5. Итоговый полный путь
+            string fullSavePath = System.IO.Path.Combine(folderPath, fileName);
+
+
+            // --- ЗАПУСК WORD ---
+
+            string templatePath = AppDomain.CurrentDomain.BaseDirectory + "ReceiptTemplate.docx";
+            WordHelper wordHelper = new WordHelper(templatePath);
+
+            var items = new Dictionary<string, string>
+    {
+        { "OrderID", selectedOrder.OrderID.ToString() },
+        { "ClientName", selectedOrder.Client.FullName },
+        { "Device", $"{selectedOrder.Device.Manufacturer} {selectedOrder.Device.Model}" },
+        { "Problem", selectedOrder.ProblemDescription },
+        { "Date", DateTime.Now.ToString("dd.MM.yyyy") }
+    };
+
+            // Передаем путь на рабочий стол
+            wordHelper.CreateDocument(items, fullSavePath);
         }
     }
 }
